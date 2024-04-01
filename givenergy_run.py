@@ -9,6 +9,9 @@ import sys
 import requests
 import configparser
 import logging
+import redis
+
+redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 logging.basicConfig(filename='/var/log/emoncms/givenergy.log', level=logging.ERROR, format='%(asctime)s %(message)s')
 
@@ -45,6 +48,8 @@ while (True):
 
                 # prepare the data to be sent to the server
                 data_to_send = {
+                    "node": "givenergy",
+                    
                     "p_load_demand": inverter['p_load_demand'],
                     "p_grid_out": inverter['p_grid_out'],
                     "p_inverter_out": inverter['p_inverter_out'],
@@ -57,16 +62,20 @@ while (True):
                 # pretty print the data
                 logging.info(json.dumps(data_to_send, indent=4))
 
-                # sent the data to local emoncms server
-                try:
-                    url = emoncms_host+"/input/post.json?node=givenergy&json=" + json.dumps(data_to_send) + "&apikey=" + emoncms_apikey
-                    result = requests.get(url)
-                    # print result 
-                    logging.info(result.text)
+                if config['emoncms']['redis_enable'] == '1':
+                    redis_client.rpush('emonhub:sub', json.dumps(data_to_send))
 
-                except Exception as e:
-                    logging.error(e)
-                    pass
+                # sent the data to local emoncms server
+                if config['emoncms']['http_enable'] == '1':
+                    try:
+                        url = emoncms_host+"/input/post.json?node=givenergy&json=" + json.dumps(data_to_send) + "&apikey=" + emoncms_apikey
+                        result = requests.get(url)
+                        # print result 
+                        logging.info(result.text)
+
+                    except Exception as e:
+                        logging.error(e)
+                        pass
 
         except Exception as e:
             logging.error(e)
