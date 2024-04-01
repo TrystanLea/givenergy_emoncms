@@ -46,11 +46,15 @@ while (True):
             
             if 'p_load_demand' in inverter:
 
-                # prepare the data to be sent to the server
+                # prepare the data to be sent to the servers
                 data_to_send = {
                     "node": "givenergy",
                     
+                    "charge_status":inverter['charge_status'],
+                    "system_mode":inverter['system_mode'],
+                    
                     "p_load_demand": inverter['p_load_demand'],
+                    "p_battery": inverter['p_battery'],
                     "p_grid_out": inverter['p_grid_out'],
                     "p_inverter_out": inverter['p_inverter_out'],
                     "p_pv1": inverter['p_pv1'],
