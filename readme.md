@@ -4,10 +4,15 @@
 A simple script to read and post data from a givenergy inverter and battery to emoncms.
 
 **givenergy_run_simple_schedule.py**<br>
-As above but also reads in a charge/discharge schedule compiled using the `agile_scheduler.py` script.
+As above but also reads in a charge/discharge schedule compiled using the *agile_scheduler.py* script.
 
 **agile_scheduler.py**<br>
 A simple battery charge/discharge scheduling program based on Octopus Agile day ahead tariff forecast. 
+
+**Redis required:**<br>
+The schedule created by *agile_scheduler.py* is transfered to *givenergy_run_simple_schedule.py* via redis which is a dependency for these scripts.
+*agile_scheduler.py* also accesses the battery state of charge via a redis key populated from *givenergy_run_simple_schedule.py*.
+Redis dependencies are available on the standard OpenEnergyMonitor emonSD image.
 
 ## Install read only
 
