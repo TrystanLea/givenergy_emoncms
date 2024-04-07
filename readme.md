@@ -14,7 +14,7 @@ The schedule created by *agile_scheduler.py* is transfered to *givenergy_run_sim
 *agile_scheduler.py* also accesses the battery state of charge via a redis key populated from *givenergy_run_simple_schedule.py*.
 Redis dependencies are available on the standard OpenEnergyMonitor emonSD image.
 
-## Install read only
+## Install
 
 1\. Install `givenergy-modbus` library:
 
