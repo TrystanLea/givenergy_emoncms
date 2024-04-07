@@ -83,6 +83,7 @@ while (True):
 
                 if config['emoncms']['redis_enable'] == '1':
                     redis_client.rpush('emonhub:sub', json.dumps(data_to_send))
+                    redis_client.set('battery_percent',inverter['battery_percent'])
 
                 # sent the data to local emoncms server
                 if config['emoncms']['http_enable'] == '1':
@@ -104,12 +105,19 @@ while (True):
                 current_time = hour + minute/60
 
                 state = "off"
+                cost = 0
+
+                # load agile schedule
+                schedule = json.loads(redis_client.get('agile_schedule'))
 
                 for s in schedule:
                     # convert the time string to float
-                    s_time = int(s["time"].split(":")[0]) + int(s["time"].split(":")[1])/60
-                    if current_time >= s_time:
+                    # s_time = int(s["time"].split(":")[0]) + int(s["time"].split(":")[1])/60
+                    # if current_time >= s_time:
+                    #     state = s["state"]
+                    if time.time() >= s["timestamp"]:
                         state = s["state"]
+                        cost = s["cost"]
 
 
                 # get the current state of the battery
@@ -124,7 +132,7 @@ while (True):
                     current_state = "discharging"
 
                 # print the current time, state, and current state
-                print ("Current time: ", hmstr, " State: ", state, " Current state: ", current_state)
+                print ("Current time: ", hmstr, " State: ", state, " Current state: ", current_state, " Cost: ", cost)
 
                 
 

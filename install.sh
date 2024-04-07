@@ -9,7 +9,7 @@ StartLimitIntervalSec=5
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /opt/emoncms/modules/givenergy_emoncms/givenergy_run_read_only.py
+ExecStart=/usr/bin/python3 /opt/emoncms/modules/givenergy_emoncms/givenergy_run_simple_schedule.py
 User=pi
 Restart=always
 RestartSec=30s
