@@ -1,12 +1,12 @@
 # GivEnergy to Emoncms 
 
-**givenergy_run_read_only.py**
+**givenergy_run_read_only.py**<br>
 A simple script to read and post data from a givenergy inverter and battery to emoncms.
 
-**givenergy_run_simple_schedule.py**
+**givenergy_run_simple_schedule.py**<br>
 As above but also reads in a charge/discharge schedule compiled using the `agile_scheduler.py` script.
 
-**agile_scheduler.py**
+**agile_scheduler.py**<br>
 A simple battery charge/discharge scheduling program based on Octopus Agile day ahead tariff forecast. 
 
 ## Install read only
