@@ -62,19 +62,19 @@ for i in range(6):
         # Check if the request was successful
         if response.status_code != 200:
             print("Failed to get Agile tariff data")
-            time.sleep(10)
+            time.sleep(60)
             continue
 
         data = response.json()
         if 'results' not in data:
             print("Failed to get Agile tariff data")
-            time.sleep(10)
+            time.sleep(60)
             continue
         # If we got here, we have the data
         break
     except:
         print("Failed to get Agile tariff data, retrying")
-        time.sleep(10)
+        time.sleep(60)
 
 # If we failed to get the data, exit
 if 'results' not in data:
