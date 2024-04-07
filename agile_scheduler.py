@@ -178,6 +178,6 @@ for s in schedule:
 
 # If we are not in dry run mode, save the schedule to Redis
 # This will be read by the main service
-if not config['agile']['dry_run']:
+if not int(config['agile']['dry_run']):
     print ("Saving schedule to redis")
     r.set('agile_schedule', json.dumps(schedule))
