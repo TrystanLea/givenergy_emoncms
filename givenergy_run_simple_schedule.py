@@ -13,7 +13,7 @@ import redis
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
-logging.basicConfig(filename='/var/log/emoncms/givenergy.log', level=logging.ERROR, format='%(asctime)s %(message)s')
+logging.basicConfig(filename='/var/log/emoncms/givenergy.log', level=logging.INFO, format='%(asctime)s %(message)s')
 
 #log to console
 console = logging.StreamHandler()
@@ -132,17 +132,17 @@ while (True):
                     current_state = "discharging"
 
                 # print the current time, state, and current state
-                print ("Current time: ", hmstr, " State: ", state, " Current state: ", current_state, " Cost: ", cost)
+                logging.info("Current time: "+str(hmstr)+" State: "+str(state)+" Current state: "+str(current_state)+" Cost: "+str(cost))
 
                 
 
                 if current_state != "charging" and state == "charge":
-                    print ("Starting battery charge")
+                    logging.info("Starting battery charge")
                     client = GivEnergyClient(host=givenergy_host)
                     client.set_charge_slot_1((datetime.time(hour=00, minute=00), datetime.time(hour=23, minute=59)))
 
                 if current_state != "discharging" and state == "discharge":
-                    print ("Starting battery discharge")
+                    logging.info("Starting battery discharge")
                     client = GivEnergyClient(host=givenergy_host)
                     client.set_charge_slot_1((datetime.time(hour=00, minute=00), datetime.time(hour=00, minute=00)))
                     time.sleep(1)
@@ -150,7 +150,7 @@ while (True):
                     client.set_mode_dynamic()
 
                 if current_state != "off" and state == "off":
-                    print ("Stopping battery charge & discharge")
+                    logging.info("Stopping battery charge & discharge")
                     client = GivEnergyClient(host=givenergy_host)
                     client.set_charge_slot_1((datetime.time(hour=00, minute=00), datetime.time(hour=00, minute=00)))
                     time.sleep(1)
