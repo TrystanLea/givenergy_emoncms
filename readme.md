@@ -1,4 +1,6 @@
-# GivEnergy to Emoncms 
+# GivEnergy Emoncms Agile
+
+Post data from GivEnergy battery to Emoncms and schedule charging and discharging based on Octopus Agile tariff. 
 
 **givenergy_run_read_only.py**<br>
 A simple script to read and post data from a givenergy inverter and battery to emoncms.
@@ -20,7 +22,9 @@ Redis dependencies are available on the standard OpenEnergyMonitor emonSD image.
 
     pip3 install givenergy-modbus
 
-2\. Copy `example.config.ini` and rename to `config.ini`. Configure emoncms apikey and givenergy inverter ip address.
+2\. Clone repo `git clone https://github.com/TrystanLea/givenergy_emoncms /opt/emoncms/modules/givenergy_emoncms`
+
+2\. `cd  /opt/emoncms/modules/givenergy_emoncm` then Copy `example.config.ini` and rename to `config.ini`. Configure emoncms apikey and givenergy inverter ip address.
 
 3\. Modify `install.sh` to run either `givenergy_run_read_only.py` or `givenergy_run_simple_schedule.py` as required.
 
