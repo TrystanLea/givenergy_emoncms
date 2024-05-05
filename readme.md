@@ -32,3 +32,13 @@ Run `agile_scheduler.py` from cron at midnight every night:
 
     crontab -e
     0 0 * * * python3 /opt/emoncms/modules/givenergy_emoncms/agile_scheduler.py
+
+## Check logs 
+
+`sudo systemctl status givenergy_emoncms.service` 
+
+`journalctl -u givenergy_emoncms.service --since today`
+
+`tail /var/log/emoncms/givenergy.log`
+
+
