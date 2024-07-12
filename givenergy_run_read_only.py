@@ -10,6 +10,7 @@ import requests
 import configparser
 import logging
 import redis
+import nmap_oem
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -22,9 +23,29 @@ script_dir = sys.path[0]
 config = configparser.ConfigParser()
 config.read(script_dir+'/config.ini')
 
+
 emoncms_host = config['emoncms']['host']
 emoncms_apikey = config['emoncms']['apikey']
-givenergy_host = config['givenergy']['host']
+
+givenergy_host = None
+if 'host' in config['givenergy']:
+    givenergy_host = config['givenergy']['host']
+
+if 'mac' in config['givenergy']:
+    network_range = nmap_oem.get_network_range()
+    if network_range:
+        print(f"Determined network range: {network_range}")
+        devices = nmap_oem.nmap(network_range)
+        for device in devices:
+            mac_address = nmap_oem.get_mac_address(device['ip'])
+            if mac_address == config['givenergy']['mac']:
+                print(f"Found {mac} at IP: {device['ip']}")
+                logging.info(f"Found {mac} at IP: {device['ip']}")
+                givenergy_host = device['ip']
+                break
+
+if givenergy_host is None:
+    sys.exit(0)
 
 last_time = time.time() - 10
 
@@ -43,9 +64,9 @@ while (True):
 
             inverter = p.inverter.dict()
             battery = p.batteries[0].dict()
-            
-            if 'p_load_demand' in inverter:
 
+            if 'p_load_demand' in inverter:
+                print(inverter['p_load_demand'])
                 # prepare the data to be sent to the servers
                 data_to_send = {
                     "node": "givenergy",
@@ -85,8 +106,3 @@ while (True):
         except Exception as e:
             logging.error(e)
             pass
-    
-
-
-
-
