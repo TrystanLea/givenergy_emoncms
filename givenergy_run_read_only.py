@@ -49,12 +49,19 @@ if givenergy_host is None:
 
 last_time = time.time() - 10
 
+# If retry count reaches 6 (1 minute), restart the script
+retry_count = 0
+
 while (True):
     time.sleep(0.1)
 
     # Every 5 seconds, get the current plant status
     if (time.time() - last_time >= 10):
         last_time = time.time()
+
+        if retry_count >= 6:
+            logging.error("Restarting the script")
+            sys.exit(0)
 
         logging.info("Requesting data")
         try:
@@ -105,4 +112,5 @@ while (True):
 
         except Exception as e:
             logging.error(e)
+            retry_count += 1
             pass
