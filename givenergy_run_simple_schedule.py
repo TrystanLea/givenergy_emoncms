@@ -44,8 +44,8 @@ if 'mac' in config['givenergy']:
         for device in devices:
             mac_address = nmap_oem.get_mac_address(device['ip'])
             if mac_address == config['givenergy']['mac']:
-                print(f"Found {mac} at IP: {device['ip']}")
-                logging.info(f"Found {mac} at IP: {device['ip']}")
+                print(f"Found {mac_address} at IP: {device['ip']}")
+                logging.info(f"Found {mac_address} at IP: {device['ip']}")
                 givenergy_host = device['ip']
                 break
 
