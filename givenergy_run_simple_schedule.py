@@ -10,6 +10,7 @@ import requests
 import configparser
 import logging
 import redis
+import nmap_oem
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -30,7 +31,26 @@ config.read(script_dir+'/config.ini')
 
 emoncms_host = config['emoncms']['host']
 emoncms_apikey = config['emoncms']['apikey']
-givenergy_host = config['givenergy']['host']
+
+givenergy_host = None
+if 'host' in config['givenergy']:
+    givenergy_host = config['givenergy']['host']
+
+if 'mac' in config['givenergy']:
+    network_range = nmap_oem.get_network_range()
+    if network_range:
+        print(f"Determined network range: {network_range}")
+        devices = nmap_oem.nmap(network_range)
+        for device in devices:
+            mac_address = nmap_oem.get_mac_address(device['ip'])
+            if mac_address == config['givenergy']['mac']:
+                print(f"Found {mac} at IP: {device['ip']}")
+                logging.info(f"Found {mac} at IP: {device['ip']}")
+                givenergy_host = device['ip']
+                break
+
+if givenergy_host is None:
+    sys.exit(0)
 
 last_time = time.time() - 10
 
@@ -42,12 +62,19 @@ schedule = [
     {"time":"19:00", "state":"off"}
 ]
 
+# If retry count reaches 6 (1 minute), restart the script
+retry_count = 0
+
 while (True):
     time.sleep(0.1)
 
     # Every 5 seconds, get the current plant status
     if (time.time() - last_time >= 10):
         last_time = time.time()
+
+        if retry_count >= 6:
+            logging.error("Restarting the script")
+            sys.exit(0)
 
         logging.info("Requesting data")
         try:
@@ -159,6 +186,7 @@ while (True):
 
         except Exception as e: 
             logging.error(e)
+            retry_count += 1
             pass
     
 
