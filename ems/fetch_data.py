@@ -3,6 +3,7 @@ import requests
 import json
 import sys
 import configparser
+import random
 
 # get script directory
 script_dir = sys.path[0]
@@ -23,12 +24,12 @@ requests.packages.urllib3.disable_warnings()
 
 def fetch_data():
     try:
-
+        global source_url
         # add random=0.8519328280130646 to the end of the URL to prevent caching
-        source_url = source_url + "&random=" + str(random.random())
-        print ("source_url: ", source_url)
+        url = source_url + "&random=" + str(random.random())
+        print ("source_url: ", url)
 
-        response = requests.get(source_url, verify=False, timeout=5)
+        response = requests.get(url, verify=False, timeout=5)
         response.raise_for_status()
         data = response.json()
         if "msg" in data:
