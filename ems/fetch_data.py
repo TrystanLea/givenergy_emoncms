@@ -1,7 +1,7 @@
 import time
 import requests
 import json
-
+import sys
 import configparser
 
 # get script directory
@@ -27,7 +27,7 @@ def fetch_data():
         # add random=0.8519328280130646 to the end of the URL to prevent caching
         source_url = source_url + "&random=" + str(random.random())
         print ("source_url: ", source_url)
-        
+
         response = requests.get(source_url, verify=False, timeout=5)
         response.raise_for_status()
         data = response.json()
