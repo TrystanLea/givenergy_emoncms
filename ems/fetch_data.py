@@ -11,8 +11,8 @@ script_dir = sys.path[0]
 config = configparser.ConfigParser()
 config.read(script_dir+'/config.ini')
 
-emoncms_apikey = config['emoncms_apikey']
-givenergy_ems_ip = config['givenergy_ems_ip']
+emoncms_apikey = config['config']['emoncms_apikey']
+givenergy_ems_ip = config['config']['givenergy_ems_ip']
 
 # Define URLs
 source_url = f"https://{givenergy_ems_ip}/action/getSysSummaryInfoAction?name=User"
