@@ -38,8 +38,8 @@ def givenergy_ems_login():
         print("login_data: ", login_data)
 
         if "msg" in login_data:
-            if "authority" in data["msg"]:
-                if data["msg"]["authority"] == 1:
+            if "authority" in login_data["msg"]:
+                if login_data["msg"]["authority"] == 1:
                     print("Login successful")
                     return True
             # If we get here, login failed    
