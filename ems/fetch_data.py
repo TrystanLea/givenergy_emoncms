@@ -14,7 +14,7 @@ config.read(script_dir+'/config.ini')
 
 emoncms_apikey = config['config']['emoncms_apikey']
 givenergy_ems_ip = config['config']['givenergy_ems_ip']
-username = config['config']['gienergy_ems_user']
+username = config['config']['givenergy_ems_user']
 password = config['config']['givenergy_ems_pass']
 
 # Define URLs
@@ -38,12 +38,13 @@ def givenergy_ems_login():
         print("login_data: ", login_data)
 
         if "msg" in login_data:
-            if login_data["msg"] == "success":
-                print("Login successful")
-                return True
-            else:
-                print("Login failed:", login_data)
-                return False
+            if "authority" in data["msg"]:
+                if data["msg"]["authority"] == 1:
+                    print("Login successful")
+                    return True
+            # If we get here, login failed    
+            print("Login failed:", login_data)
+            return False
         else:
             print("Unexpected login response format:", login_data)
             return False
