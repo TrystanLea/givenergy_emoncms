@@ -63,6 +63,9 @@ def fetch_data():
         response = requests.get(url, verify=False, timeout=5)
         response.raise_for_status()
         data = response.json()
+
+        print("data: ", data)
+
         if "msg" in data:
             # Check if logged out
             # {'msg': {'name': 'Installer', 'authority': 0}, 'code': 47, 'eorr_msg': 'erro'}
