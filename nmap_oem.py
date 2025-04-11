@@ -63,6 +63,11 @@ def get_mac_address(ip: str) -> Optional[str]:
         return None
 
 def get_manufacturer(mac: str) -> Optional[str]:
+
+    # check if none
+    if mac is None:
+        return None
+        
     oui = mac.replace(':', '')[:6]
     try:
         response = requests.get(f"https://api.macvendors.com/{oui}")
