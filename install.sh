@@ -1,6 +1,19 @@
 #!/bin/bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+sudo apt-get update
+sudo apt-get install -y nmap
+
+
+# It's probably better to fix this by using python venv
+if [ -e /usr/lib/python3.11/EXTERNALLY-MANAGED ]; then
+    sudo rm -rf /usr/lib/python3.11/EXTERNALLY-MANAGED
+    echo "Removed pip3 external management warning."
+fi
+
+# 1. Install dependencies
+pip3 install givenergy-modbus
+
 # 1. Create givenergy emoncms service
 cat <<EOF > givenergy_emoncms.service
 [Unit]
